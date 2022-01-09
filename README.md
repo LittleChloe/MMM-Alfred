@@ -1,2 +1,2 @@
 # MMM-Alfred
-MagicMirror² Voice Command Module based on annyang.
+MagicMirror² Voice Command Module based on Picovoice (Porcupine/Rhino).

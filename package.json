@@ -1,0 +1,19 @@
+{
+  "name": "mmm-alfred",
+  "version": "1.0.0",
+  "description": "MMM Voice Command Module based on Picovoice",
+  "main": "MMM-Alfred.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LittleChloe/MMM-Alfred.git"
+  },
+  "author": "Chloe",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/LittleChloe/MMM-Alfred/issues"
+  },
+  "dependencies": {
+    "@picovoice/picovoice-node": "^2.0.2",
+    "@picovoice/pvrecorder-node": "^1.0.2"
+  }
+}
