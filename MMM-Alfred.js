@@ -36,6 +36,11 @@ Module.register("MMM-Alfred", {
                 MM.getModules().withClass("MMM-Spotify").enumerate(function (module) {
                     module.hide(1000)
                 })
+                break
+
+            case "SOME_NOTIFICATION":
+                this.sendSocketNotification("Test_WORKED")
+                break
         }
     }
 })

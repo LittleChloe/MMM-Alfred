@@ -1,21 +1,25 @@
-const NodeHelper = require("node_helper");
-const Picovoice = require("@picovoice/picovoice-node");
+const NodeHelper = require("node_helper")
+const Picovoice = require("@picovoice/picovoice-node")
 const PvRecorder = require("@picovoice/pvrecorder-node")
+
+// Wrapper for inference callback
+let self = null;
 
 module.exports = NodeHelper.create({
     // Node_Helper Entry Point
     start: function() {
-        this.config = {}
-        this.isListening = false
-        this.picovoice = null
-        this.recorder = null
+        self = this
+        self.config = {}
+        self.isListening = false
+        self.picovoice = null
+        self.recorder = null
     },
 
     socketNotificationReceived: function(notification, payload) {
         switch(notification) {
             case "INIT":
                 // set the internal config to the payload received in socket notification
-                this.config = payload
+                self.config = payload
                 this.initialize()
                 break
 
@@ -44,38 +48,38 @@ module.exports = NodeHelper.create({
         }
 
         //Create a new picovoice instance
-        this.picovoice = new Picovoice(
-            this.config.accessKey,
+        self.picovoice = new Picovoice(
+            self.config.accessKey,
             keywordFilePath,
             keywordCallback,
             contextFilePath,
-            this.inference,
-             this.config.keywordSensitivity,
-             this.config.contextSensitivity,
-             false,
+            self.inference,
+            self.config.keywordSensitivity,
+            self.config.contextSensitivity,
+            false,
             porcupineLanguageFilePath,
             rhinoLanguageFilePath
         );
 
-        this.recorder = new PvRecorder(this.config.audioDeviceIndex, this.picovoice.frameLength);
-        console.log("[Alfred] Using device: " + this.recorder.getSelectedDevice());
+        self.recorder = new PvRecorder(self.config.audioDeviceIndex, self.picovoice.frameLength)
+        console.log("[Alfred] Using audio device: " + self.recorder.getSelectedDevice())
     },
 
     startListening: async function() {
-        console.log("[Alfred] Start listening now ...");
+        console.log("[Alfred] Start listening now ...")
 
-        this.isListening = true;
-        this.recorder.start();
+        self.isListening = true;
+        self.recorder.start();
 
-        while (this.isListening) {
-            const pcm = await this.recorder.read();
-            this.picovoice.process(pcm);
+        while (self.isListening) {
+            const pcm = await self.recorder.read();
+            self.picovoice.process(pcm);
         }
     },
 
     stopListening: function() {
-        this.isListening = false
-        this.recorder.release();
+        self.isListening = false
+        self.recorder.release();
 
         console.log("[Alfred] Stopped listening.");
     },
@@ -85,12 +89,12 @@ module.exports = NodeHelper.create({
             switch (inference.intent) {
                 case "openSpotify":
                     console.log("Start Spotify")
-                    // this.sendSocketNotification("START_SPOTIFY")
+                    self.sendSocketNotification("START_SPOTIFY")
                     break
 
                 case "closeSpotify":
                     console.log("Stop Spotify")
-                    //this.sendSocketNotification("CLOSE_SPOTIFY")
+                    self.sendSocketNotification("CLOSE_SPOTIFY")
                     break
             }
         }
