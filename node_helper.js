@@ -1,6 +1,7 @@
 const NodeHelper = require("node_helper")
 const Picovoice = require("@picovoice/picovoice-node")
 const PvRecorder = require("@picovoice/pvrecorder-node")
+const Gpio = require("onoff").Gpio
 
 // Wrapper for inference callback
 let self = null;
@@ -13,6 +14,7 @@ module.exports = NodeHelper.create({
         self.isListening = false
         self.picovoice = null
         self.recorder = null
+        self.button = null
     },
 
     socketNotificationReceived: function(notification, payload) {
@@ -63,6 +65,18 @@ module.exports = NodeHelper.create({
 
         self.recorder = new PvRecorder(self.config.audioDeviceIndex, self.picovoice.frameLength)
         console.log("[Alfred] Using audio device: " + self.recorder.getSelectedDevice())
+
+        console.log("[Alfred] Initialize buttons")
+        self.button = new Gpio(4, "in", "both", {debounceTimeout: 10});
+
+        button.watch((err, value) => {
+            if (err) {
+                throw err;
+            }
+
+            console.log("Button pressed")
+        });
+        console.log("[Alfred] Successfully initialized buttons")
     },
 
     startListening: async function() {
