@@ -69,7 +69,7 @@ module.exports = NodeHelper.create({
         console.log("[Alfred] Initialize buttons")
         self.button = new Gpio(4, "in", "both", {debounceTimeout: 10});
 
-        button.watch((err, value) => {
+        self.button.watch((err, value) => {
             if (err) {
                 throw err;
             }

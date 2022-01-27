@@ -16,5 +16,11 @@
     "@picovoice/picovoice-node": "^2.0.2",
     "@picovoice/pvrecorder-node": "^1.0.2",
     "onoff": "latest"
+  },
+  "devDependencies": {
+    "magicmirror-rebuild": "^1.0.0"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/.bin/MagicMirror-rebuild"
   }
 }
